@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="contact.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+  <title>Contact Us</title>
+  <meta name="description" content="Get In Touch with us for any inquires right Here!">
+  <link rel="icon" type="image/x-icon" href="../images/static.png">
+</head>
+<body>
+
+  <header>
+    
+    <div class="navbar">
+      <div class="logo"><a href="../"><img src="./images/PHlogo.jpg" alt="Logo"></a></div>
+      <div class="links">
+        <ul class="links">
+        <li><a href="../">Lost Report</a></li>
+        <li><a href="">Return Item Report</a></li>
+        </ul>
+      </div>
+      <div id="toggle_btn" class="toggle_btn">
+        <i id="toggle_btn_Icon" class="fa-solid fa-bars"></i>
+      </div>
+    </div>
+    <div id="dropdown_menu" class="dropdown_menu ">
+      <ul>
+        <li><a href="../">Lost Report</a></li>
+        <li><a href="../found/">Return Item Report</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <div class="contact">
+      <div class="form-wrapper">
+        <h2>Lost And Found Reprot</h2>
+        <form action="https://formspree.io/f/mwpkpvbo" method="POST" enctype="multipart/form-data" id="contact-form" class="contact-form">
+  
+          <!-- Hidden input to prevent spam -->
+          <input type="hidden" name="_captcha" value="false">
+
+          <!-- Hidden field for the form title -->
+          <input type="hidden" name="Form Title" value="Lost Item Recivng Report">
+          
+          <!-- Found By -->
+          <div class="input-wrap w-100">
+            <input class="contact-input" autocomplete="off" name="Foundby" type="text" required>
+            <label>Item returned:</label>
+            <i class="icon fa-solid fa-pen-to-square"></i> 
+          </div>
+
+          <!-- Recived By -->
+          <div class="input-wrap ">
+            <input class="contact-input" autocomplete="off" name="Foundby" type="text" required>
+            <label>Recived By:</label>
+            <i class="icon fa-solid fa-user"></i> 
+          </div>
+        
+          <!-- Phone Number -->
+          <div class="input-wrap">
+            <input class="contact-input" autocomplete="off" name="ID" type="text" required>
+            <label>Phone Number</label>
+            <i class="icon fa-solid fa-phone"></i> 
+          </div>
+        
+          <!-- Description -->
+          <div class="input-wrap textarea w-100">
+            <textarea name="discription" autocomplete="off" class="contact-input" required></textarea>
+            <label>Description</label>
+            <i class="icon fa-solid fa-circle-info"></i> 
+          </div>
+          <!-- Recived By -->
+          <div class="input-wrap w-100">
+            <input class="contact-input" autocomplete="off" name="Foundby" type="text" required>
+            <label>Returned By:</label>
+            <i class="icon fa-solid fa-user"></i> 
+          </div>
+          <!-- Signature (as a canvas) -->
+          
+          <div class="input-wrap w-100 ">
+            <label class="signature">Signature:</label>
+            <canvas id="canvas" class="contact-input" style="border:1px solid #000;"></canvas>
+            <i class="icon fa-solid  fa-file-signature sign"></i>
+            <input type="hidden" id="signature-image" name="signature-image">
+            <input type="button" id="clear" value="Clear" class="clear-btn">
+          </div>
+          <!-- Contact buttons -->
+          <div class="contact-buttons w-100">
+            <input type="button" id="download-pdf" value="Download PDF" class="btn">
+            <input type="submit" id="save" value="Send Message" class="btn">
+          </div>
+        
+        </form>
+      </div>
+  </div>
+
+  <footer>
+    <p>&copy; <span id="year"></span> Buzzin FZCO. All rights reserved.</p>
+  </footer>
+
+<script>
+    // Get the current year
+    const yearSpan = document.getElementById('year');
+    yearSpan.textContent = new Date().getFullYear();
+</script>
+  <script type="module">
+    import SignaturePad from "https://cdn.jsdelivr.net/npm/signature_pad@5.0.3/+esm";
+
+   // Initialize SignaturePad
+    const canvas = document.getElementById("canvas");
+    const signaturePad = new SignaturePad(canvas);
+    const signatureInput = document.getElementById("signature-image");
+
+    // Resize Canvas
+    function resizeCanvas() {
+      const ratio = Math.max(window.devicePixelRatio || 1, 1);
+      canvas.width = canvas.offsetWidth * ratio;
+      canvas.height = canvas.offsetHeight * ratio;
+      canvas.getContext("2d").scale(ratio, ratio);
+      signaturePad.clear();
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    // Handle clear button
+    document.getElementById("clear").addEventListener("click", () => {
+      signaturePad.clear();
+    });
+
+    // const saveAnchor = document.getElementById("download");
+    // const saveButton = document.getElementById("save");
+    // saveButton.addEventListener("click", () => {
+    //   saveAnchor.href = signaturePad.toDataURL();
+    //   saveAnchor.click();
+    // });
+
+   // Save signature as base64 and include in form
+    document.getElementById("contact-form").addEventListener("submit", (event) => {
+  if (!signaturePad.isEmpty()) {
+    signatureInput.value =signaturePad.toDataURL();  // Ensure this sets the base64 value in the hidden input
+  } else {
+    event.preventDefault();
+    alert("Please add a signature before submitting.");
+  }
+});
+
+    // Download form data and signature as PDF
+    document.getElementById("download-pdf").addEventListener("click", () => {
+  const { jsPDF } = window.jspdf;
+
+  const pdf = new jsPDF();
+  pdf.text(20, 20, 'Lost And Found Report');
+  pdf.text(20, 30, 'Date Found: ' + document.querySelector('input[name="Date"]').value);
+  pdf.text(20, 40, 'Time Found: ' + document.querySelector('input[name="Time"]').value);
+  pdf.text(20, 50, 'Location: ' + document.querySelector('input[name="location"]').value);
+  pdf.text(20, 60, 'Serial Number: ' + document.querySelector('input[name="SerNum"]').value);
+  pdf.text(20, 70, 'Police Ref.: ' + document.querySelector('input[name="ref"]').value);
+  pdf.text(20, 80, 'Found By: ' + document.querySelector('input[name="Foundby"]').value);
+  pdf.text(20, 90, 'ID No.: ' + document.querySelector('input[name="ID"]').value);
+  pdf.text(20, 100, 'Department: ' + document.querySelector('input[name="Dept"]').value);
+  pdf.text(20, 110, 'Description: ' + document.querySelector('textarea[name="discription"]').value);  // Fixed spelling of "description"
+
+  // Add signature image
+  if (!signaturePad.isEmpty()) {
+    const imgData = signaturePad.toDataURL("image/png");
+    pdf.addImage(imgData, 'PNG', 20, 120, 180, 60);  // Ensure proper scaling
+  }
+
+  // Download PDF
+  pdf.save("LostAndFoundReport.pdf");
+});
+
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="contact.js"></script>
+</body>
+</html>

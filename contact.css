@@ -1,0 +1,454 @@
+/* Start Global Rules */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+@font-face {
+  font-family: "Gotham Rounded";
+  src: url('../gotham/GothamRounded-Medium.otf');
+}
+@font-face {
+  font-family: "Gotham Rounded";
+  src: url('../gotham/GothamRounded-Bold.otf');
+  font-weight: bold;
+}
+*::-moz-selection { /* Code for Firefox */
+  background:#0072cd;
+}
+html {
+  --accent: #0072cd;
+  --background: #f9f9f9;
+  background: url(images/bg.png) center / cover;
+}
+*::selection {
+  background:#0072cd;
+}
+
+body{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: var(--accent);
+  font-family: "Montserrat", sans-serif;
+  margin: 0;
+    
+}
+body::-webkit-scrollbar{
+  display: none;
+}
+
+li{
+  list-style: none;
+}
+a{
+  text-decoration: none;
+  color: white;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+}
+
+h2{
+  font-family: "Gotham Rounded", sans-serif;
+}
+h3{
+  font-family: "Gotham Rounded", sans-serif;
+}
+h4{
+  font-family: "Montserrat", sans-serif;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Start Header */
+header{
+  position: relative;
+  padding: 15px 2rem 0px 2rem;
+  z-index: 3;
+  background-color: #fff1;
+  backdrop-filter: blur(7px);
+  box-shadow: 0 0.4rem 0.8rem #0005;
+  border-radius: 0.4rem;
+  font-family: "Montserrat", sans-serif;
+}
+header li, header a{
+  text-decoration: none;
+  color: #222939;
+  font-size: 1.3rem;
+  /* font-family:  */
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+}
+header a:hover{
+  color:#0072cd;
+}
+.navbar{
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content:flex-start;
+  gap: 25%;
+}
+.navbar .logo{
+  padding-top: 1px;
+}
+.navbar .logo img{
+  height: 80px;
+  margin-right: -40px;
+}
+.navbar .links{
+  display: flex;
+  position: relative;
+  gap: 2rem;
+}
+.navbar .toggle_btn{
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: none;
+}
+
+/* dropdown */
+
+.dropdown_menu{
+  display: none;
+  position: absolute;
+  right: 2rem;
+  top: 70px;
+  width: 300px;
+  height: 0;
+  background-color: #fffB;
+  backdrop-filter: blur(15px);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: height 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.dropdown_menu.open{
+  padding-top: 10px;
+  height:100px;
+
+}
+.dropdown_menu ul{
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.dropdown_menu li{
+  padding: 0.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Gotham Rounded";
+  font-weight: bold;
+}
+
+/* responsive */
+@media screen and (max-width: 1068px) {
+  .navbar{
+    justify-content: space-between;
+  }
+  .navbar .links{
+    display: none;
+  }
+  .navbar .toggle_btn{
+    display: block;
+  }
+  .dropdown_menu{
+    display: block;
+  }
+  .dropdown_menu li {
+    justify-content: space-between;
+  }
+  .dropdown_menu li a{
+    font-size: 18px;
+  }
+}
+@media screen and (max-width: 576px){
+  .dropdown_menu{
+    left: 2rem;
+    width: unset;
+  }
+  }
+/* End header */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.contact{
+  display: flex;
+  width:50%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+  margin-top:50px;
+  margin-left: 25%;
+  background-color: #fffd;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 0.4rem 0.8rem #0005;
+  border-radius: 0.8rem;
+}
+
+/* .contact {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 50px;
+} */
+
+/* .contact .body{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+} */
+
+/* .contact   img{
+  width: 500px;
+} */
+
+.form-wrapper{
+  max-width: 30rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.contact .contact-form{
+  display: grid;
+  margin-top: 2.55rem;
+  margin-bottom: 1rem;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 2rem;
+  row-gap: 2rem;
+}
+
+.input-wrap{
+  position: relative;
+}
+
+.contact   .input-wrap.w-100{
+  grid-column: span 2;
+}
+
+.contact   .input-wrap.w-33{
+  grid-column: span 2;
+}
+
+.contact-input{
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 1.5rem 0.5rem calc(0.75rem - 2px) 0.5rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 15px;
+  background-color: hsla(208, 50%, 50%, 6.5%);
+  transition: 0.3s;
+  border: 2px solid transparent;
+  box-shadow: 0 0 0 0px hsla(208, 92%, 54%, 0.169);
+}
+
+.contact-input:hover{
+  background-color: hsla(208, 50%, 50%, 14%);
+}
+
+.input-wrap label{
+  position: absolute;
+  top: 50%;
+  left: 23px;
+  transform: translateY(-50%);
+  color: #8c9aaf;
+  pointer-events: none;
+  transition: 0.25s;
+}
+.input-wrap label.signature{
+  top: 10%;
+}
+
+.input-wrap .icon{
+  position: absolute;
+  right: 0rem;
+  top:50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #8c9aaf;
+  font-size: 1.15rem;
+  transition: 0.3s;
+}
+
+textarea.contact-input{
+  resize: none;
+  width: 100%;
+  min-height: 80px;
+}
+
+textarea.contact-input ~ label{
+  top: 1.2rem;
+  transform: none;
+}
+
+textarea.contact-input ~ .icon{
+  top: 1.3rem;
+  transform: none;
+}
+
+.input-wrap.focus .contact-input{
+background-color: white;
+border: 2px solid #0072cd;
+box-shadow: 0 0 0 5px hsla(208, 91%, 55%, 0.11);
+}
+
+.input-wrap.focus label{
+  color: #0072cd;
+}
+
+.input-wrap.focus .icon{
+color: #0072cd;
+}
+
+.input-wrap.not-empty label{
+  font-size: 0.66rem;
+  top: 0.75rem;
+  transform: translateY(0);
+}
+
+.contact-buttons{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 4rem;
+  width: 100%;
+  grid-column: span 2;
+  font-family: Poppins;
+}
+
+.btn{
+display: inline-block;
+padding: 1.1rem 0.5rem;
+background-color: #0072cd;
+color: black;
+border-radius: 40px;
+border: none;
+font-family: "Montserrat", sans-serif;
+font-weight: 500;
+font-size: 16px;
+cursor: pointer;
+transition: 0.3s;
+}
+.clear-btn{
+  background-color: #0000;
+  color: black;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  border-radius: 40px;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn:hover{
+  background-color:#222939;
+  color: #fff;
+}
+
+.btn.upload{
+  position: relative;
+  background-color: hsla(208, 50%, 50%, 6.5%) ;
+}
+
+.btn.upload span{
+  color: #9ca7b6 ;
+}
+
+.btn.upload:hover{
+  background-color: hsla(208, 50%, 50%, 14%) ;
+}
+
+.btn.upload input{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+  opacity: 0;
+}
+
+
+@media screen and (max-width: 1080px ) {
+.contact{
+  padding-right: 20px;
+}
+}
+
+@media screen and (max-width: 1042px ) {
+  .contact{
+    padding: 40px;
+  }
+}
+
+canvas {
+  width: 100%;
+  max-width: 800px;
+  height: 300px;
+  cursor: crosshair;
+}
+.input-wrap .sign{
+  top:10%;
+}
+
+
+
+footer {
+  background-color: #fff1;
+  backdrop-filter: blur(7px);
+  box-shadow: 0 0.4rem 0.8rem #0005;
+  color: #fff;
+  border-radius: 0.4rem;
+  font-family: "Montserrat", sans-serif;
+  text-align: center; /* Centered text */
+  padding: 10px 0; /* Padding for spacing */
+  position: relative; /* Ensures the footer stays at the bottom */
+  width: 100%; /* Full width */
+  bottom: 0; /* Position at the bottom */
+  margin-top: 50px;
+}
+
+footer p {
+  margin: 0; /* No margin for paragraph */
+}
+
