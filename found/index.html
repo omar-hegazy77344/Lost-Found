@@ -19,7 +19,7 @@
       <div class="links">
         <ul class="links">
         <li><a href="../">Lost Report</a></li>
-        <li><a href="./">Return Item Report</a></li>
+        <li><a href="">Return Item Report</a></li>
         </ul>
       </div>
       <div id="toggle_btn" class="toggle_btn">
@@ -29,13 +29,13 @@
     <div id="dropdown_menu" class="dropdown_menu ">
       <ul>
         <li><a href="../">Lost Report</a></li>
-        <li><a href="./">Return Item Report</a></li>
+        <li><a href="../found/">Return Item Report</a></li>
       </ul>
     </div>
   </header>
 
   <div class="contact">
-      <div class="form-wrapper">
+      
         <h2>Lost And Found Reprot</h2>
         <form action="https://formspree.io/f/mwpkpvbo" method="POST" enctype="multipart/form-data" id="contact-form" class="contact-form">
   
@@ -45,11 +45,18 @@
           <!-- Hidden field for the form title -->
           <input type="hidden" name="Form Title" value="Lost Item Recivng Report">
           
-          <!-- Found By -->
-          <div class="input-wrap w-100">
+          <!-- Item Name -->
+          <div class="input-wrap">
             <input class="contact-input" autocomplete="off" name="Foundby" type="text" required>
             <label>Item returned:</label>
             <i class="icon fa-solid fa-pen-to-square"></i> 
+          </div>
+
+          <!-- Serial Number -->
+          <div class="input-wrap">
+            <input class="contact-input" autocomplete="off" name="SerNum" type="text" required>
+            <label>Serial Number</label>
+            <i class="icon fa-solid fa-hashtag"></i> 
           </div>
 
           <!-- Recived By -->
@@ -65,19 +72,21 @@
             <label>Phone Number</label>
             <i class="icon fa-solid fa-phone"></i> 
           </div>
-        
+          
           <!-- Description -->
           <div class="input-wrap textarea w-100">
             <textarea name="discription" autocomplete="off" class="contact-input" required></textarea>
             <label>Description</label>
             <i class="icon fa-solid fa-circle-info"></i> 
           </div>
+
           <!-- Recived By -->
           <div class="input-wrap w-100">
             <input class="contact-input" autocomplete="off" name="Foundby" type="text" required>
             <label>Returned By:</label>
             <i class="icon fa-solid fa-user"></i> 
           </div>
+
           <!-- Signature (as a canvas) -->
           
           <div class="input-wrap w-100 ">
@@ -87,29 +96,41 @@
             <input type="hidden" id="signature-image" name="signature-image">
             <input type="button" id="clear" value="Clear" class="clear-btn">
           </div>
+
+          <!-- Camera Capture -->
+          <div class="input-wrap w-100">
+            <input type="button" id="camera-button" value="Open Camera" class="btn">
+            <input type="hidden" id="camera-image" name="camera-image">
+          </div>
+
+          <!-- Video and Canvas Elements (hidden) -->
+          <video id="video" style="display:none;"></video>
+          <canvas id="photo-canvas" style="display:none;"></canvas>
+
           <!-- Contact buttons -->
           <div class="contact-buttons w-100">
             <input type="button" id="download-pdf" value="Download PDF" class="btn">
             <input type="submit" id="save" value="Send Message" class="btn">
           </div>
-        
         </form>
-      </div>
   </div>
 
   <footer>
     <p>&copy; <span id="year"></span> Buzzin FZCO. All rights reserved.</p>
   </footer>
 
-<script>
+  <script>
     // Get the current year
     const yearSpan = document.getElementById('year');
     yearSpan.textContent = new Date().getFullYear();
-</script>
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
   <script type="module">
     import SignaturePad from "https://cdn.jsdelivr.net/npm/signature_pad@5.0.3/+esm";
 
-   // Initialize SignaturePad
+  // Initialize SignaturePad
     const canvas = document.getElementById("canvas");
     const signaturePad = new SignaturePad(canvas);
     const signatureInput = document.getElementById("signature-image");
@@ -137,7 +158,7 @@
     //   saveAnchor.click();
     // });
 
-   // Save signature as base64 and include in form
+  // Save signature as base64 and include in form
     document.getElementById("contact-form").addEventListener("submit", (event) => {
   if (!signaturePad.isEmpty()) {
     signatureInput.value =signaturePad.toDataURL();  // Ensure this sets the base64 value in the hidden input
@@ -145,7 +166,77 @@
     event.preventDefault();
     alert("Please add a signature before submitting.");
   }
-});
+  });
+
+  // Camera functionality
+  const cameraButton = document.getElementById('camera-button');
+    const video = document.getElementById('video');
+    const photoCanvas = document.getElementById('photo-canvas');
+    const cameraInput = document.getElementById('camera-image');
+
+    let stream;
+
+    cameraButton.addEventListener('click', openCamera);
+
+    function openCamera() {
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true })
+          .then(s => {
+            stream = s;
+            video.srcObject = stream;
+            video.play();
+            video.style.display = 'block';
+            cameraButton.value = 'Take Photo';
+            cameraButton.removeEventListener('click', openCamera);
+            cameraButton.addEventListener('click', takePhoto);
+          })
+          .catch(err => {
+            console.error("Error accessing the camera: " + err);
+            alert("Unable to access the camera. Please check permissions.");
+          });
+      } else {
+        alert('Camera API not supported by your browser.');
+      }
+    }
+
+    function takePhoto() {
+      const context = photoCanvas.getContext('2d');
+      photoCanvas.width = video.videoWidth;
+      photoCanvas.height = video.videoHeight;
+      context.drawImage(video, 0, 0, photoCanvas.width, photoCanvas.height);
+
+      const imageDataURL = photoCanvas.toDataURL('image/png');
+      cameraInput.value = imageDataURL;
+
+      stream.getTracks().forEach(track => track.stop());
+      video.style.display = 'none';
+
+      cameraButton.value = 'Retake Photo';
+      cameraButton.removeEventListener('click', takePhoto);
+      cameraButton.addEventListener('click', retakePhoto);
+    }
+
+    function retakePhoto() {
+      cameraInput.value = '';
+      cameraButton.value = 'Open Camera';
+      cameraButton.removeEventListener('click', retakePhoto);
+      cameraButton.addEventListener('click', openCamera);
+    }
+
+    // Modify the form submission to ensure the photo is included
+    document.getElementById('contact-form').addEventListener('submit', (event) => {
+      if (cameraInput.value === '') {
+        event.preventDefault();
+        alert('Please take a photo before submitting the form.');
+      } else {
+        if (!signaturePad.isEmpty()) {
+          signatureInput.value = signaturePad.toDataURL();
+        } else {
+          event.preventDefault();
+          alert("Please add a signature before submitting.");
+        }
+      }
+    });
 
     // Download form data and signature as PDF
     document.getElementById("download-pdf").addEventListener("click", () => {
@@ -153,8 +244,6 @@
 
   const pdf = new jsPDF();
   pdf.text(20, 20, 'Lost And Found Report');
-  pdf.text(20, 30, 'Date Found: ' + document.querySelector('input[name="Date"]').value);
-  pdf.text(20, 40, 'Time Found: ' + document.querySelector('input[name="Time"]').value);
   pdf.text(20, 50, 'Location: ' + document.querySelector('input[name="location"]').value);
   pdf.text(20, 60, 'Serial Number: ' + document.querySelector('input[name="SerNum"]').value);
   pdf.text(20, 70, 'Police Ref.: ' + document.querySelector('input[name="ref"]').value);
@@ -169,12 +258,18 @@
     pdf.addImage(imgData, 'PNG', 20, 120, 180, 60);  // Ensure proper scaling
   }
 
+  // Add captured image to the PDF if available
+  const capturedImage = document.getElementById("camera-image").value;
+  if (capturedImage) {
+    pdf.addImage(capturedImage, 'PNG', 20, 170, 180, 100); // Add captured image
+  }
+
   // Download PDF
   pdf.save("LostAndFoundReport.pdf");
-});
+  });
 
   </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="contact.js"></script>
+
+  <script src="./contact.js"></script>
 </body>
 </html>
